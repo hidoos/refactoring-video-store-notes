@@ -1,38 +1,15 @@
+import { movies } from './movies';
+import { customer } from "./customer";
+
 function statement(customer, movies) {
   let totalAmount = 0;
   let frequentRenterPoints = 0;
   let result = `Rental Record for ${customer.name}\n`;
   for (let r of customer.rentals) {
-    let movie = movies[r.movieID];
-    let thisAmount = 0;
-
-    // determine amount for each movie
-    switch (movie.code) {
-      case 'regular':
-        thisAmount = 2;
-        if (r.days > 2) {
-          thisAmount += (r.days - 2) * 1.5;
-        }
-        break;
-      case 'new':
-        thisAmount = r.days * 3;
-        break;
-      case 'childrens':
-        thisAmount = 1.5;
-        if (r.days > 3) {
-          thisAmount += (r.days - 3) * 1.5;
-        }
-        break;
-    }
-
-    //add frequent renter points
-    frequentRenterPoints++;
-    // add bonus for a two day new release rental
-    if (movie.code === 'new' && r.days > 2) frequentRenterPoints++;
-
+    frequentRenterPoints += frequentRenterPointsFor(r);
     //print figures for this rental
-    result += `\t${movie.title}\t${thisAmount}\n`;
-    totalAmount += thisAmount;
+    result += `\t${movieFor(r).title}\t${amountFor(r)}\n`;
+    totalAmount += amountFor(r);
   }
   // add footer lines
   result += `Amount owed is ${totalAmount}\n`;
@@ -40,6 +17,42 @@ function statement(customer, movies) {
 
   return result;
 }
+
+function amountFor(r) {
+  let result = 0;
+
+  // determine amount for each movie
+  switch (movieFor(r).code) {
+    case 'regular':
+      result = 2;
+      if (r.days > 2) {
+        result += (r.days - 2) * 1.5;
+      }
+      break;
+    case 'new':
+      result = r.days * 3;
+      break;
+    case 'childrens':
+      result = 1.5;
+      if (r.days > 3) {
+        result += (r.days - 3) * 1.5;
+      }
+      break;
+  }
+  return result;
+}
+
+function movieFor(r) {
+  return movies[r.movieID];
+}
+
+function frequentRenterPointsFor(r) {
+  // add frequent renter points
+  // add bonus for a two day new release rental
+  return (movieFor(r).code === 'new' && r.days > 2) ? 2 : 1;
+}
+
+statement(customer, movies);
 
 /* statement method output 
   Rental Record for martin
