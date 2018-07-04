@@ -1,6 +1,10 @@
 /**
  * Using classes
  */
+// import class
+const {Customer} = require('./store-classes/customer.class');
+
+// mock data
 const {movies} = require('./movies');
 const {customer} = require('./customer');
 
@@ -54,7 +58,8 @@ function frequentRenterPointsFor(r, movies) {
   return (movieFor(r, movies).code === 'new' && r.days > 2) ? 2 : 1;
 }
 
-function textStatement(customer, movies) {
+function statement(customerArgs, movies) {
+  const customer = new Customer(customerArgs);
   let result = `Rental Record for ${customer.name}\n`;
 
   for (let r of customer.rentals) {
@@ -65,52 +70,10 @@ function textStatement(customer, movies) {
   result += `Amount owed is ${totalAmount(customer, movies)}\n`;
   result += `You earned ${totalFrequentRenterPoints(customer, movies)} frequent renter points\n`;
 
-  /**
-   * another way is using pipeline methods
-
-   function totalAmountPipe() {
-      return customer.rentals
-        .reduce((total, r) => total + amountFor(r), 0);
-    }
-
-   function totalFrequentRenterPointsPipe() {
-      return customer.rentals
-        .map(r => frequentRenterPointsFor(r))
-        .reduce((a, b) => a + b, 0)
-    }
-   */
-
   return result;
 }
 
-function htmlStatement(customer, movies) {
-  const amount = () => totalAmount(customer, movies);
-  const frequentRenterPoints = () => totalFrequentRenterPoints(customer, movies);
-  const movie = (aRental) => movieFor(aRental, movies);
-  const rentalAmount = (aRental) => amountFor(aRental, movies);
-
-  let result = `<h1>Rental Record for <em>${customer.name}</em></h1>\n`;
-  result += "<table>\n";
-  for (let r of customer.rentals) {
-    result += `  <tr><td>${movie(r).title}</td><td>${rentalAmount(r)}</td></tr>\n`;
-  }
-  result += "</table>\n";
-  result += `<p>Amount owed is <em>${amount()}</em></p>\n`;
-  result += `<p>You earned <em>${frequentRenterPoints()}</em> frequent renter points</p>\n`;
-  return result;
-}
-
-function statement(customer, movies, format = '') {
-  const dispatchTable = {
-    text: textStatement,
-    html: htmlStatement
-  };
-  if (undefined === dispatchTable[format]) throw new Error(`unknown statement for ${format}`)
-  return dispatchTable[format].call(null, customer, movies);
-}
-
-// todo 使用函数 curry 去包装 statement，返回一个新的函数，只用传 format 参数来调用
-console.log(statement(customer, movies, 'html'));
+statement(customer, movies);
 
 // console.log(htmlStatement(customer, movies));
 // console.log(statement(customer, movies));
