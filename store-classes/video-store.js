@@ -2,11 +2,11 @@
  * Using classes
  */
 // import class
-const {Customer} = require('./store-classes/customer.class');
+const {Customer} = require('./customer.class');
 
 // mock data
-const {movies} = require('./movies');
-const {customer} = require('./customer');
+const {movies} = require('../movies');
+const {customer} = require('../customer');
 
 function movieFor(rental, movies) {
   return movies[rental.movieID];
