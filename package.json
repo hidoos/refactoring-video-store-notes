@@ -1,0 +1,12 @@
+{
+  "name": "refactoring-video-store",
+  "version": "1.0.0",
+  "description": "refactoring video store",
+  "main": "store-using-top.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node store-using-top.js"
+  },
+  "author": "hidoos",
+  "license": "ISC"
+}
