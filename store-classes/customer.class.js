@@ -1,8 +1,9 @@
 const {Rental} = require("./rental.class");
 
 class Customer {
-  constructor(data) {
+  constructor(data, movies) {
     this._data = data;
+    this._movies = movies;
   }
 
   get name() {
@@ -10,7 +11,7 @@ class Customer {
   }
 
   get rentals() {
-    return this._data.rentals.map(r => new Rental(r));
+    return this._data.rentals.map(r => new Rental(r, this._movies));
   }
 }
 

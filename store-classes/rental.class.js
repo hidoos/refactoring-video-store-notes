@@ -1,6 +1,7 @@
 class Rental {
-  constructor(data) {
+  constructor(data, movies) {
     this._data = data;
+    this._movies = movies;
   }
 
   get days() {
@@ -9,6 +10,10 @@ class Rental {
 
   get movieID() {
     return this._data.movieID;
+  }
+
+  get movie() {
+    return this._movies[this.movieID];
   }
 }
 
