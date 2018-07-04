@@ -55,17 +55,27 @@ function frequentRenterPointsFor(r, movies) {
 }
 
 function statement(customer, movies) {
-  let result = `Rental Record for ${customer.name}\n`;
+  // build local partial function
+  const amount = () => totalAmount(customer, movies);
+  const frequentRenterPoints = () => totalFrequentRenterPoints(customer, movies);
+  const movie = (aRental) => movieFor(aRental, movies);
+  const rentalAmount = (aRental) => amountFor(aRental, movies);
 
-  for (let r of customer.rentals) {
-    result += `\t${movieFor(r, movies).title}\t${amountFor(r, movies)}\n`;
+  let data = createStatementData(customer, movies);
+
+  let result = `<h1>Rental Record for <em>${data.name}</em></h1>\n`;
+  result += "<table>\n";
+  for (let r of data.rentals) {
+    result += `  <tr><td>${movie(r).title}</td><td>${rentalAmount(r)}</td></tr>\n`;
   }
-
-  // add footer lines
-  result += `Amount owed is ${totalAmount(customer, movies)}\n`;
-  result += `You earned ${totalFrequentRenterPoints(customer, movies)} frequent renter points\n`;
-
+  result += "</table>\n";
+  result += `<p>Amount owed is <em>${amount()}</em></p>\n`;
+  result += `<p>You earned <em>${frequentRenterPoints()}</em> frequent renter points</p>\n`;
   return result;
+
+  function createStatementData(customer, movies) {
+    return Object.assign({}, customer);
+  }
 }
 
 console.log(statement(customer, movies));
