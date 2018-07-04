@@ -74,7 +74,14 @@ function statement(customer, movies) {
   return result;
 
   function createStatementData(customer, movies) {
-    return Object.assign({}, customer);
+    let result = Object.assign({}, customer);
+    result.rentals = customer.rentals.map(rental => createRentalData(rental));
+    return result;
+
+    function createRentalData(rental) {
+      let result = Object.assign({}, rental);
+      return result;
+    }
   }
 }
 
