@@ -1,4 +1,4 @@
-export var customer = {
+const customer = {
   name: 'martin',
   rentals: [
     {
@@ -10,4 +10,8 @@ export var customer = {
       days: 1
     }
   ]
+};
+
+module.exports = {
+  customer: customer
 };

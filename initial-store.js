@@ -1,5 +1,5 @@
-import { movies } from './movies';
-import { customer } from "./customer";
+const {movies} = require('./movies');
+const {customer} = require('./customer');
 
 function statement(customer, movies) {
   let result = `Rental Record for ${customer.name}\n`;
@@ -80,7 +80,7 @@ function statement(customer, movies) {
   return result;
 }
 
-statement(customer, movies);
+console.log(statement(customer, movies));
 
 /* statement method output 
   Rental Record for martin
