@@ -84,14 +84,19 @@ function textStatement(customer, movies) {
 }
 
 function htmlStatement(customer, movies) {
+  const amount = () => totalAmount(customer, movies);
+  const frequentRenterPoints = () => totalFrequentRenterPoints(customer, movies);
+  const movie = (aRental) => movieFor(aRental, movies);
+  const rentalAmount = (aRental) => amountFor(aRental, movies);
+
   let result = `<h1>Rental Record for <em>${customer.name}</em></h1>\n`;
   result += "<table>\n";
   for (let r of customer.rentals) {
-    result += `  <tr><td>${movieFor(r, movies).title}</td><td>${amountFor(r, movies)}</td></tr>\n`;
+    result += `  <tr><td>${movie(r).title}</td><td>${rentalAmount(r)}</td></tr>\n`;
   }
   result += "</table>\n";
-  result += `<p>Amount owed is <em>${totalAmount(customer, movies)}</em></p>\n`;
-  result += `<p>You earned <em>${totalFrequentRenterPoints(customer, movies)}</em> frequent renter points</p>\n`;
+  result += `<p>Amount owed is <em>${amount()}</em></p>\n`;
+  result += `<p>You earned <em>${frequentRenterPoints()}</em> frequent renter points</p>\n`;
   return result;
 }
 
@@ -105,7 +110,7 @@ function statement(customer, movies, format = '') {
 }
 
 // todo 使用函数 curry 去包装 statement，返回一个新的函数，只用传 format 参数来调用
-console.log(statement(customer, movies, 'text'));
+console.log(statement(customer, movies, 'html'));
 
 // console.log(htmlStatement(customer, movies));
 // console.log(statement(customer, movies));
